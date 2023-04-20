@@ -1,0 +1,4 @@
+include skytek_utils/VERSION
+
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
