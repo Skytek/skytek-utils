@@ -1,7 +1,30 @@
 import re
+from pathlib import Path
 from os import path
 
 from setuptools import find_packages, setup
+
+
+def strip_comments(l):
+    return l.split("#", 1)[0].strip()
+
+
+def _pip_requirement(req, *root):
+    if req.startswith("-r "):
+        _, path = req.split()
+        return reqs(*root, *path.split("/"))
+    return [req]
+
+
+def _reqs(*f):
+    path = (Path.cwd() / "requirements").joinpath(*f)
+    with path.open() as fh:
+        reqs = [strip_comments(l) for l in fh.readlines()]
+        return [_pip_requirement(r, *f[:-1]) for r in reqs if r]
+
+
+def reqs(*f):
+    return [req for subreq in _reqs(*f) for req in subreq]
 
 
 def long_description():
@@ -38,6 +61,8 @@ setup(
     license="LGPLv3",
     long_description=long_description(),
     long_description_content_type="text/markdown",
+    install_requires=reqs("base.txt"),
+    tests_require=reqs("tests.txt"),
     packages=find_packages(exclude=["tests*",]),
     zip_safe=False,
     classifiers=[
