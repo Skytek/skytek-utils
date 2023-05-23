@@ -21,9 +21,12 @@ class Client:
             path = f"/{path}"
         return f"{protocol}://{host}{path}"
 
-    def _call_api(self, method, path, *args, **kwargs):
-        method_function = getattr(requests, method)
+    def _call_api_by_path(self, method, path, *args, **kwargs):
         url = self._make_url(path)
+        return self._call_api(method, url, *args, **kwargs)
+
+    def _call_api(self, method, url, *args, **kwargs):
+        method_function = getattr(requests, method)
         headers = {
             **kwargs.pop("headers", {}),
             **self._make_headers(),
@@ -44,13 +47,26 @@ class Client:
         return headers
 
     def get(self, path, *args, **kwargs):
-        return self._call_api("get", path, *args, **kwargs)
+        return self._call_api_by_path("get", path, *args, **kwargs)
 
     def post(self, path, *args, **kwargs):
-        return self._call_api("post", path, *args, **kwargs)
+        return self._call_api_by_path("post", path, *args, **kwargs)
 
     def patch(self, path, *args, **kwargs):
-        return self._call_api("patch", path, *args, **kwargs)
+        return self._call_api_by_path("patch", path, *args, **kwargs)
 
     def delete(self, path, *args, **kwargs):
-        return self._call_api("delete", path, *args, **kwargs)
+        return self._call_api_by_path("delete", path, *args, **kwargs)
+
+    def get_all(self, path, *args, **kwargs):
+        url = self._make_url(path)
+        while url:
+            result = self._call_api("get", *args, **kwargs)
+            result.raise_for_status()
+            response = result.json()
+
+            yield from response["result"]
+
+            url = response.get("next")
+            if "query" in kwargs:
+                del kwargs["query"]
