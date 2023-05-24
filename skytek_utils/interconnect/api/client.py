@@ -65,7 +65,7 @@ class Client:
             result.raise_for_status()
             response = result.json()
 
-            yield from response["result"]
+            yield from response["results"]
 
             url = response.get("next")
             if "query" in kwargs:
