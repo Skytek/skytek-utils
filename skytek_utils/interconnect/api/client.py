@@ -61,7 +61,7 @@ class Client:
     def get_all(self, path, *args, **kwargs):
         url = self._make_url(path)
         while url:
-            result = self._call_api("get", *args, **kwargs)
+            result = self._call_api("get", url, *args, **kwargs)
             result.raise_for_status()
             response = result.json()
 
