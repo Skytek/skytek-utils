@@ -2,8 +2,8 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 import jwt
-from django.conf import settings
 
+from .conf import settings
 from .user import ModuleUser
 
 

@@ -1,6 +1,6 @@
 import requests
-from django.conf import settings
 
+from .conf import settings
 from .jwt import generate_jwt
 
 
@@ -14,9 +14,7 @@ class Client:
 
     def _make_url(self, path: str):
         host = self._get_host()
-        protocol = (
-            "https" if getattr(settings, "INTERCONNECT_USE_SSL", True) else "http"
-        )
+        protocol = "https" if settings.INTERCONNECT_USE_SSL else "http"
         if not path.startswith("/"):
             path = f"/{path}"
         return f"{protocol}://{host}{path}"
