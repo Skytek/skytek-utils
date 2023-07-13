@@ -1,10 +1,13 @@
 # pylint: disable=invalid-name
-try:
-    from django.conf import settings as django_settings
-except ImportError:
-    django_settings = None
-
 import os
+
+if not os.environ.get("INTERCONNECT_SKIP_DJANGO", False):
+    try:
+        from django.conf import settings as django_settings
+    except ImportError:
+        django_settings = None
+else:
+    django_settings = None
 
 
 class Settings:
