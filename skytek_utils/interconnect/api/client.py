@@ -66,5 +66,5 @@ class Client:
             yield from response["results"]
 
             url = response.get("next")
-            if "query" in kwargs:
-                del kwargs["query"]
+            if "params" in kwargs:
+                del kwargs["params"]
