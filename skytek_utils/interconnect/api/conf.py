@@ -44,5 +44,10 @@ class Settings:
             raise ValueError("Setting INTERCONNECT_MODULE_NAME is required")
         return value
 
+    @property
+    def INTERCONNECT_OVERRIDE_MODULE_HOST(self):
+        value = self.get_value("INTERCONNECT_OVERRIDE_MODULE_HOST")
+        return value or {}
+
 
 settings = Settings()
