@@ -8,19 +8,23 @@ class Client:
     def __init__(self, remote_module: str) -> None:
         self.remote_module = remote_module
 
-    def _get_host(self):
+    def _get_protocol_and_host(self):
         if self.remote_module in settings.INTERCONNECT_OVERRIDE_MODULE_HOST:
             return settings.INTERCONNECT_OVERRIDE_MODULE_HOST[self.remote_module]
 
+        host = self._get_host()
+        protocol = "https" if settings.INTERCONNECT_USE_SSL else "http"
+        return f"{protocol}://{host}"
+
+    def _get_host(self):
         environment_domain = settings.INTERCONNECT_ENVIRONMENT_DOMAIN
         return f"{self.remote_module}.{environment_domain}"
 
     def _make_url(self, path: str):
-        host = self._get_host()
-        protocol = "https" if settings.INTERCONNECT_USE_SSL else "http"
         if not path.startswith("/"):
             path = f"/{path}"
-        return f"{protocol}://{host}{path}"
+        protocol_and_host = self._get_protocol_and_host()
+        return f"{protocol_and_host}{path}"
 
     def _call_api_by_path(self, method, path, *args, **kwargs):
         url = self._make_url(path)
