@@ -9,6 +9,10 @@ class Client:
         self.remote_module = remote_module
 
     def _get_host(self):
+        if hasattr(settings, "INTERCONNECT_OVERRIDE_MODULE_HOST"):
+            if self.remote_module in settings.INTERCONNECT_OVERRIDE_MODULE_HOST:
+                return settings.INTERCONNECT_OVERRIDE_MODULE_HOST[self.remote_module]
+
         environment_domain = settings.INTERCONNECT_ENVIRONMENT_DOMAIN
         return f"{self.remote_module}.{environment_domain}"
 
