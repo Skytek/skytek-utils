@@ -14,6 +14,9 @@ class Client:
 
         host = self._get_host()
         protocol = "https" if settings.INTERCONNECT_USE_SSL else "http"
+        if settings.INTERCONNECT_PORT:
+            port = settings.INTERCONNECT_PORT
+            return f"{protocol}://{host}:{port}"
         return f"{protocol}://{host}"
 
     def _get_host(self):

@@ -31,6 +31,11 @@ class Settings:
         return value is None or value
 
     @property
+    def INTERCONNECT_PORT(self):
+        value = self.get_value("INTERCONNECT_PORT")
+        return value
+
+    @property
     def INTERCONNECT_JWT_ENCODE_KEY(self):
         value = self.get_value("INTERCONNECT_JWT_ENCODE_KEY")
         if not value:
