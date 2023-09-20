@@ -27,8 +27,9 @@ class Settings:
 
     @property
     def INTERCONNECT_USE_SSL(self):
-        value = self.get_value("INTERCONNECT_ENVIRONMENT_DOMAIN")
-        return value is None or value
+        value = self.get_value("INTERCONNECT_USE_SSL")
+
+        return value is None or str(value)[:1].lower() in ("1", "y", "t")
 
     @property
     def INTERCONNECT_PORT(self):
