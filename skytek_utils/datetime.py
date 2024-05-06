@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from typing import Generator, Optional, Tuple, Union
 
 from dateutil.parser import parse
@@ -10,6 +10,9 @@ def ensure_datetime(value: Optional[Union[str, datetime]]):
 
     if isinstance(value, datetime):
         return value
+
+    if isinstance(value, date):
+        return datetime.combine(value, datetime.min.time())
 
     return parse(value)
 
